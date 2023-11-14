@@ -1,3 +1,4 @@
+import 'package:expense_harmony/widgets/add_new_expense.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_harmony/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_harmony/models/expense_model.dart';
@@ -27,8 +28,9 @@ class _ExpensesState extends State<Expenses> {
 
   void _openAddExpenseModal() {
     showModalBottomSheet(
-        context: context,
-        builder: (ctx) => const Text("Modal sheet for expenses"));
+      context: context,
+      builder: (ctx) => const AddNewExpense(),
+    );
   }
 
   @override
