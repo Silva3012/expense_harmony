@@ -25,9 +25,22 @@ class _ExpensesState extends State<Expenses> {
         category: Category.travel),
   ];
 
+  void _openAddExpenseModal() {
+    showModalBottomSheet(
+        context: context,
+        builder: (ctx) => const Text("Modal sheet for expenses"));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Expense Harmony"),
+        actions: [
+          IconButton(
+              onPressed: _openAddExpenseModal, icon: const Icon(Icons.add)),
+        ],
+      ),
       body: Column(
         children: [
           const Text("Expense chart"),
