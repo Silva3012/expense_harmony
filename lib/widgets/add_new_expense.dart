@@ -1,3 +1,4 @@
+import 'package:expense_harmony/models/expense_model.dart';
 import 'package:flutter/material.dart';
 
 class AddNewExpense extends StatefulWidget {
@@ -12,6 +13,7 @@ class AddNewExpense extends StatefulWidget {
 class _AddNewExpenseState extends State<AddNewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
+  DateTime? _selectedDate;
 
   @override
   void dispose() {
@@ -26,14 +28,18 @@ class _AddNewExpenseState extends State<AddNewExpense> {
   }
 
   // Function for date picker
-  void _currentDatePicker() {
+  void _currentDatePicker() async {
     final today = DateTime.now();
     final firstDate = DateTime(today.year - 1, today.month, today.day);
-    showDatePicker(
-        context: context,
-        initialDate: today,
-        firstDate: firstDate,
-        lastDate: today);
+    final pickedDate = await showDatePicker(
+      context: context,
+      initialDate: today,
+      firstDate: firstDate,
+      lastDate: today,
+    );
+    setState(() {
+      _selectedDate = pickedDate;
+    });
   }
 
   @override
@@ -65,14 +71,18 @@ class _AddNewExpenseState extends State<AddNewExpense> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const Text("Select Date"),
+                  Text(
+                    _selectedDate == null
+                        ? "No Date Selected"
+                        : formatter.format(_selectedDate!),
+                  ),
                   IconButton(
                     onPressed: _currentDatePicker,
                     icon: const Icon(Icons.calendar_month),
-                  )
+                  ),
                 ],
               ),
-            )
+            ),
           ],
         ),
         Row(
