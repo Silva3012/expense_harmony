@@ -67,6 +67,14 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    Widget homeScreen = const Center(
+      child: Text("No expenses to display. Start adding some!"),
+    );
+
+    if (_documentedExpenses.isNotEmpty) {
+      homeScreen = ExpensesList(_documentedExpenses, _deleteExpense);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Expense Harmony"),
@@ -79,7 +87,7 @@ class _ExpensesState extends State<Expenses> {
         children: [
           const Text("Expense chart"),
           Expanded(
-            child: ExpensesList(_documentedExpenses, _deleteExpense),
+            child: homeScreen,
           ),
         ],
       ),
