@@ -2,7 +2,9 @@ import 'package:expense_harmony/models/expense_model.dart';
 import 'package:flutter/material.dart';
 
 class AddNewExpense extends StatefulWidget {
-  const AddNewExpense({super.key});
+  const AddNewExpense(this.onAddExpense, {super.key});
+
+  final void Function(Expense expense) onAddExpense;
 
   @override
   State<AddNewExpense> createState() {
@@ -41,6 +43,43 @@ class _AddNewExpenseState extends State<AddNewExpense> {
     setState(() {
       _selectedDate = pickedDate;
     });
+  }
+
+  // This function will do some user input validation
+  void _submitExpense() {
+    final enteredAmount = double.tryParse(_amountController.text);
+    final amountIsInvalid = enteredAmount == null || enteredAmount < 0;
+
+    if (_titleController.text.trim().isEmpty ||
+        amountIsInvalid ||
+        _selectedDate == null) {
+      // We will show a dialog box
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text("Invalid Input"),
+          content: const Text(
+              "Make sure that a valid title, amount, date and category has been entered."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(ctx);
+              },
+              child: const Text("Okay"),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    widget.onAddExpense(
+      Expense(
+          title: _titleController.text,
+          amount: enteredAmount,
+          date: _selectedDate!,
+          category: _selectedCategory),
+    );
   }
 
   @override
@@ -112,11 +151,7 @@ class _AddNewExpenseState extends State<AddNewExpense> {
             ),
             const Spacer(),
             ElevatedButton(
-              onPressed: () {
-                print(_titleController.text);
-                print(_amountController.text);
-                // _closeModal();
-              },
+              onPressed: _submitExpense,
               child: const Text("Save"),
             ),
             const SizedBox(

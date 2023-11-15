@@ -26,11 +26,19 @@ class _ExpensesState extends State<Expenses> {
         category: Category.travel),
   ];
 
+  // This function opens the modal to add an expense
   void _openAddExpenseModal() {
     showModalBottomSheet(
       context: context,
-      builder: (ctx) => const AddNewExpense(),
+      builder: (ctx) => AddNewExpense(_addExpense),
     );
+  }
+
+  // This function adds an expense
+  void _addExpense(Expense expense) {
+    setState(() {
+      _documentedExpenses.add(expense);
+    });
   }
 
   @override
