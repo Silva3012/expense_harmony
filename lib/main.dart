@@ -1,12 +1,28 @@
 import 'package:expense_harmony/widgets/expenses.dart';
 import 'package:flutter/material.dart';
 
+// Light mode color scheme
 var kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 46, 132, 219),
 );
+
+// Dark mode color scheme
+var kDarkColorScheme = ColorScheme.fromSeed(
+  brightness: Brightness.dark,
+  seedColor: const Color.fromARGB(222, 46, 53, 76),
+);
+
 void main() {
   runApp(
     MaterialApp(
+      darkTheme: ThemeData.dark().copyWith(
+        useMaterial3: true,
+        colorScheme: kDarkColorScheme,
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+              backgroundColor: kDarkColorScheme.secondaryContainer),
+        ),
+      ),
       theme: ThemeData().copyWith(
         useMaterial3: true,
         colorScheme: kColorScheme,
