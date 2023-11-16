@@ -1,4 +1,5 @@
 import 'package:expense_harmony/widgets/add_new_expense.dart';
+import 'package:expense_harmony/widgets/chart/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_harmony/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_harmony/models/expense_model.dart';
@@ -85,7 +86,7 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          const Text("Expense chart"),
+          Chart(_documentedExpenses),
           Expanded(
             child: homeScreen,
           ),
