@@ -1,4 +1,5 @@
 import 'package:expense_harmony/widgets/add_new_expense.dart';
+import 'package:expense_harmony/widgets/chart/chart.dart';
 import 'package:flutter/material.dart';
 import 'package:expense_harmony/widgets/expenses_list/expenses_list.dart';
 import 'package:expense_harmony/models/expense_model.dart';
@@ -44,13 +45,37 @@ class _ExpensesState extends State<Expenses> {
 
   // This function removes an expense
   void _deleteExpense(Expense expense) {
+    final expenseIndex = _documentedExpenses.indexOf(expense);
+
     setState(() {
       _documentedExpenses.remove(expense);
     });
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        duration: const Duration(seconds: 3),
+        content: const Text("Expense deleted."),
+        action: SnackBarAction(
+            label: "Undo",
+            onPressed: () {
+              setState(() {
+                _documentedExpenses.insert(expenseIndex, expense);
+              });
+            }),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget homeScreen = const Center(
+      child: Text("No expenses to display. Start adding some!"),
+    );
+
+    if (_documentedExpenses.isNotEmpty) {
+      homeScreen = ExpensesList(_documentedExpenses, _deleteExpense);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Expense Harmony"),
@@ -61,9 +86,9 @@ class _ExpensesState extends State<Expenses> {
       ),
       body: Column(
         children: [
-          const Text("Expense chart"),
+          Chart(_documentedExpenses),
           Expanded(
-            child: ExpensesList(_documentedExpenses, _deleteExpense),
+            child: homeScreen,
           ),
         ],
       ),
