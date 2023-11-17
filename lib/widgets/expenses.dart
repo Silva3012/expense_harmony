@@ -14,22 +14,12 @@ class Expenses extends StatefulWidget {
 }
 
 class _ExpensesState extends State<Expenses> {
-  final List<Expense> _documentedExpenses = [
-    Expense(
-        title: "Flutter Course",
-        amount: 229.00,
-        date: DateTime.now(),
-        category: Category.leisure),
-    Expense(
-        title: "Plane ticket",
-        amount: 1530.00,
-        date: DateTime.now(),
-        category: Category.travel),
-  ];
+  final List<Expense> _documentedExpenses = [];
 
   // This function opens the modal to add an expense
   void _openAddExpenseModal() {
     showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => AddNewExpense(_addExpense),
@@ -68,6 +58,8 @@ class _ExpensesState extends State<Expenses> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width;
+
     Widget homeScreen = const Center(
       child: Text("No expenses to display. Start adding some!"),
     );
@@ -84,14 +76,25 @@ class _ExpensesState extends State<Expenses> {
               onPressed: _openAddExpenseModal, icon: const Icon(Icons.add)),
         ],
       ),
-      body: Column(
-        children: [
-          Chart(_documentedExpenses),
-          Expanded(
-            child: homeScreen,
-          ),
-        ],
-      ),
+      body: width < 500
+          ? Column(
+              children: [
+                Chart(_documentedExpenses),
+                Expanded(
+                  child: homeScreen,
+                ),
+              ],
+            )
+          : Row(
+              children: [
+                Expanded(
+                  child: Chart(_documentedExpenses),
+                ),
+                Expanded(
+                  child: homeScreen,
+                ),
+              ],
+            ),
     );
   }
 }
